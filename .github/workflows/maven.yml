@@ -1,14 +1,13 @@
-name: Java CI with Maven
+name: Java CI with Maven and ZAP DAST Scan
 
 on:
   push:
-    branches: ["main"]
+    branches: [ "main" ]
   pull_request:
-    branches: ["main"]
+    branches: [ "main" ]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -21,12 +20,9 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
-        
-    - name: Build with Maven
-      run: mvn clean package
 
-    - name: List target directory contents
-      run: ls -la target
+    - name: Build with Maven
+      run: mvn -B package --file pom.xml
 
   semgrep:
     name: semgrep/ci
@@ -43,7 +39,7 @@ jobs:
       - run: semgrep ci
 
   zap-scan:
-    name: DAST-scan
+    name: ZAP DAST Scan
     runs-on: ubuntu-20.04
     needs: build
     
@@ -71,4 +67,18 @@ jobs:
         run: docker build -t webgoat-build:latest .
 
       - name: Run Docker container
-        run: docker run -t -p 127.0.0.1:8080:8080 -p 127.0.0.1:9090:9090 webgoat-build:latest
+        run: docker run -d -p 127.0.0.1:8080:8080 -p 127.0.0.1:9090:9090 webgoat-build:latest
+
+      - name: Wait
+        run: sleep 60  
+
+      - name: Run scan
+        run: |
+          docker run --network="host" -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-stable zap-baseline.py \
+          -t http://localhost:8080 -g gen.conf -r zap-report.html
+
+      - name: Archive results
+        uses: actions/upload-artifact@v2
+        with:
+          name: zap-scan-results
+          path: zap-report.html
