@@ -39,6 +39,8 @@ jobs:
   zap-scan:
     name: DAST-scan
     runs-on: ubuntu-20.04
+
+    needs: build
     
     steps:
       - name: Checkout repository
