@@ -8,7 +8,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -41,23 +40,14 @@ jobs:
   zap-scan:
     name: DAST-scan
     runs-on: ubuntu-20.04
-    
     needs: build
     
     steps:
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-          cache: maven
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Build Docker image
-        working-directory: ./  # Specify the working directory for this step
         run: docker build -t webgoat-build:latest .
 
       - name: Run Docker container
-        working-directory: ./  # Specify the working directory for this step
         run: docker run -it -p 127.0.0.1:8080:8080 -p 127.0.0.1:9090:9090 webgoat-build:latest
