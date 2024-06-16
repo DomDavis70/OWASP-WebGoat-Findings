@@ -47,8 +47,12 @@ jobs:
   zap-scan:
     name: DAST-scan
     runs-on: ubuntu-20.04
+    defaults:
+      run:
+        working-directory: .
+      
 
-    needs: semgrep
+    needs: build
     
     steps:
       - name: Build Docker image
