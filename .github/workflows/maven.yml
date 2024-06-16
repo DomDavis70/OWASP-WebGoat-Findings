@@ -79,9 +79,7 @@ jobs:
         run: sleep 60  
 
       - name: Run scan
-        run: |
-          docker run --network="host" -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-stable zap-baseline.py \
-          -t http://localhost:8080 -g gen.conf -r zap-report.html
+        run: docker run -t ghcr.io/zaproxy/zaproxy:stable zap-baseline.py -t https://localhost:8080
 
       - name: Archive results
         uses: actions/upload-artifact@v2
