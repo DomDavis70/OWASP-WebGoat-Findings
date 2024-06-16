@@ -33,6 +33,8 @@ jobs:
   semgrep:
     name: semgrep/ci
     runs-on: ubuntu-20.04
+    needs: build
+    
     env:
       SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
     container:
@@ -45,6 +47,8 @@ jobs:
   zap-scan:
     name: DAST-scan
     runs-on: ubuntu-20.04
+
+    needs: semgrep
     
     steps:
       - name: Build Docker image
