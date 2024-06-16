@@ -2,25 +2,30 @@ name: Java CI with Maven
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   build:
+
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
     - name: Set up JDK 17
       uses: actions/setup-java@v3
       with:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
+        
     - name: Build with Maven
       run: mvn clean package
-    - name: Verify target directory
+
+    - name: List target directory contents
       run: ls -la target
 
   semgrep:
@@ -45,6 +50,12 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: List root directory contents
+        run: ls -la
+
+      - name: List target directory contents
+        run: ls -la target
 
       - name: Build Docker image
         run: docker build -t webgoat-build:latest .
