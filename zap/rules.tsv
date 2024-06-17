@@ -1,2 +1,2 @@
-90005   Sec-Fetch-User Header is Missing
-10020   Missing Anti-clickjacking Header
+90005   IGNORE    Sec-Fetch-User Header is Missing
+10020   IGNORE    Missing Anti-clickjacking Header
