@@ -1,88 +1,88 @@
 ---
 env:
   contexts:
-  - name: "Authentication Test"
-    urls:
-    - "http://127.0.0.1:8081"
-    includePaths:
-    - "http://127.0.0.1:8081.*"
-    excludePaths: []
-    authentication:
-      method: "browser"
-      parameters:
-        loginPageUrl: "http://127.0.0.1:8081/WebGoat/login"
-        loginPageWait: 10
-        browserId: "chrome"
-      verification:
-        method: "poll"
-        loggedInRegex: "\\Q 200 OK\\E"
-        loggedOutRegex: "\\Q 302 Found\\E"
-        pollFrequency: 60
-        pollUnits: "requests"
-        pollUrl: "http://127.0.0.1:8081/WebGoat/start.mvc?username=testuser"
-        pollPostData: ""
-    sessionManagement:
-      method: "headers"
-      parameters:
-        Cookie: "JSESSIONID={%cookie:JSESSIONID%}"
-    technology:
-      exclude: []
-    users:
-    - name: "testuser"
-      credentials:
-        password: "testpass"
-        username: "testuser"
+    - name: "Authentication Test"
+      urls:
+        - "http://127.0.0.1:8081"
+      includePaths:
+        - "http://127.0.0.1:8081.*"
+      excludePaths: []
+      authentication:
+        method: "browser"
+        parameters:
+          loginPageUrl: "http://127.0.0.1:8081/WebGoat/login"
+          loginPageWait: 10
+          browserId: "chrome"
+        verification:
+          method: "poll"
+          loggedInRegex: "\\Q200 OK\\E"
+          loggedOutRegex: "\\Q302 Found\\E"
+          pollFrequency: 60
+          pollUnits: "requests"
+          pollUrl: "http://127.0.0.1:8081/WebGoat/start.mvc?username=testuser"
+          pollPostData: ""
+      sessionManagement:
+        method: "headers"
+        parameters:
+          Cookie: "JSESSIONID={%cookie:JSESSIONID%}"
+      technology:
+        exclude: []
+      users:
+        - name: "testuser"
+          credentials:
+            password: "testpass"
+            username: "testuser"
   parameters:
     failOnError: true
     failOnWarning: false
     progressToStdout: true
   vars: {}
 jobs:
-- parameters:
-    scanOnlyInScope: true
-    enableTags: false
-    disableAllRules: false
-  rules: []
-  name: "passiveScan-config"
-  type: "passiveScan-config"
-- parameters: {}
-  name: "spider"
-  type: "spider"
-  tests:
-  - onFail: "INFO"
-    statistic: "automation.spider.urls.added"
-    site: ""
-    operator: ">="
-    value: 100
-    type: "stats"
-    name: "At least 100 URLs found"
-- parameters:
-    maxDuration: 60
-    maxCrawlDepth: 10
-    numberOfBrowsers: 20
-    inScopeOnly: true
-  name: "spiderAjax"
-  type: "spiderAjax"
-  tests:
-  - onFail: "INFO"
-    statistic: "spiderAjax.urls.added"
-    site: ""
-    operator: ">="
-    value: 100
-    type: "stats"
-    name: "At least 100 URLs found"
-- parameters: {}
-  name: "passiveScan-wait"
-  type: "passiveScan-wait"
-- parameters: {}
-  policyDefinition:
+  - parameters:
+      scanOnlyInScope: true
+      enableTags: false
+      disableAllRules: false
     rules: []
-  name: "activeScan"
-  type: "activeScan"
-- parameters:
-    template: "risk-confidence-html"
-    reportTitle: "ZAP Scanning Report"
-    reportDescription: ""
-  name: "report"
-  type: "report"
-
+    name: "passiveScan-config"
+    type: "passiveScan-config"
+  - parameters: {}
+    name: "spider"
+    type: "spider"
+    tests:
+      - onFail: "INFO"
+        statistic: "automation.spider.urls.added"
+        site: ""
+        operator: ">="
+        value: 100
+        type: "stats"
+        name: "At least 100 URLs found"
+  - parameters:
+      maxDuration: 60
+      maxCrawlDepth: 10
+      numberOfBrowsers: 20
+      inScopeOnly: true
+    name: "spiderAjax"
+    type: "spiderAjax"
+    tests:
+      - onFail: "INFO"
+        statistic: "spiderAjax.urls.added"
+        site: ""
+        operator: ">="
+        value: 100
+        type: "stats"
+        name: "At least 100 URLs found"
+  - parameters: {}
+    name: "passiveScan-wait"
+    type: "passiveScan-wait"
+  - parameters: {}
+    policyDefinition:
+      rules: []
+    name: "activeScan"
+    type: "activeScan"
+  - parameters:
+      template: "risk-confidence-html"
+      reportTitle: "ZAP Scanning Report"
+      reportDescription: ""
+      reportDir: "/zap/wrk/output"
+    name: "report"
+    type: "report"

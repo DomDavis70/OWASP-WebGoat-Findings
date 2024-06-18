@@ -84,6 +84,7 @@ jobs:
         uses: zaproxy/action-af@v0.1.0
         with:
           plan: 'zap/automation_plan.yaml'
+          dir: '/zap/wrk/output'
           
       - name: Archive results
         uses: actions/upload-artifact@v2
