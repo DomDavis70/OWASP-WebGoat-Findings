@@ -83,7 +83,7 @@ jobs:
       - name: ZAP Automation Framework Scan
         uses: zaproxy/action-af@v0.1.0
         with:
-          plan: 'automation_plan.yaml'
+          plan: 'zap/automation_plan.yaml'
           
       - name: Archive results
         uses: actions/upload-artifact@v2
