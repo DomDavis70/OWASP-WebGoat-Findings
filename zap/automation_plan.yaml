@@ -3,9 +3,9 @@ env:
   contexts:
     - name: "Authentication Test"
       urls:
-        - "http://127.0.0.1:8081/WebGoat"
+        - "http://127.0.0.1:8081/WebGoat/login"
       includePaths:
-        - "http://127.0.0.1:8081.*"
+        - "http://127.0.0.1:8081/WebGoat.*"
       excludePaths: []
       authentication:
         method: "browser"
