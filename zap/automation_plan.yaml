@@ -3,14 +3,14 @@ env:
   contexts:
   - name: "Authentication Test"
     urls:
-    - "http://127.0.0.1:8080"
+    - "http://127.0.0.1:8000"
     includePaths:
-    - "http://127.0.0.1:8080.*"
+    - "http://127.0.0.1:8000.*"
     excludePaths: []
     authentication:
       method: "browser"
       parameters:
-        loginPageUrl: "http://127.0.0.1:8080/WebGoat/login"
+        loginPageUrl: "http://127.0.0.1:8000/WebGoat/login"
         loginPageWait: 10
         browserId: "chrome"
       verification:
@@ -19,7 +19,7 @@ env:
         loggedOutRegex: "\\Q 302 Found\\E"
         pollFrequency: 60
         pollUnits: "requests"
-        pollUrl: "http://127.0.0.1:8080/WebGoat/start.mvc?username=testuser"
+        pollUrl: "http://127.0.0.1:8000/WebGoat/start.mvc?username=testuser"
         pollPostData: ""
     sessionManagement:
       method: "headers"
