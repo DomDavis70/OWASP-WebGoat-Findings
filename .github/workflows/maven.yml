@@ -79,6 +79,11 @@ jobs:
           target: 'http://127.0.0.1:8080/WebGoat'
           rules_file_name: 'zap/rules.tsv'
           cmd_options: '-a'
+
+      - name: ZAP Automation Framework Scan
+        uses: zaproxy/action-af@v0.1.0
+        with:
+          plan: 'automation_plan.yaml'
           
       - name: Archive results
         uses: actions/upload-artifact@v2
