@@ -80,23 +80,20 @@ jobs:
           rules_file_name: 'zap/rules.tsv'
           cmd_options: '-a'
 
-      - name: Ensure output directory and access
-        run: mkdir -p $HOME/zap_output && chmod -R 777 $HOME/zap_output
-
       - name: ZAP Automation Framework Scan
         uses: zaproxy/action-af@v0.1.0
         with:
           plan: 'zap/automation_plan.yaml'
-          dir: '$HOME/zap_output'
+          dir: '/zap/wrk/output'
 
       - name: Download build artifact
         uses: actions/download-artifact@v4
         with:
           name: build-artifact
-          path: $HOME/zap_output
+          path: /zap/wrk/output
           
       - name: Archive results
         uses: actions/upload-artifact@v2
         with:
           name: zap-scan-results
-          path: $HOME/zap_output/*.html
+          path: zap-report.html

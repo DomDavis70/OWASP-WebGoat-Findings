@@ -83,7 +83,7 @@ jobs:
       template: "risk-confidence-html"
       reportTitle: "ZAP Scanning Report"
       reportDescription: ""
-      reportDir: "$HOME/zap_output"
+      reportDir: "/zap/wrk/output"
       displayReport: true
     name: "report"
     type: "report"
