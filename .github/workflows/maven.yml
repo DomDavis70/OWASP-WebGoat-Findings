@@ -80,6 +80,9 @@ jobs:
           rules_file_name: 'zap/rules.tsv'
           cmd_options: '-a'
 
+      - name: Ensure output directory and access
+        run: mkdir -p /zap/wrk/output && chmod -R 777 /zap/wrk/output
+
       - name: ZAP Automation Framework Scan
         uses: zaproxy/action-af@v0.1.0
         with:
