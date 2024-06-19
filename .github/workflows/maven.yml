@@ -81,22 +81,22 @@ jobs:
           cmd_options: '-a'
 
       - name: Ensure output directory and access
-        run: mkdir -p /zap/wrk/output && chmod -R 777 /zap/wrk/output
+        run: mkdir -p $HOME/zap_output && chmod -R 777 $HOME/zap_output
 
       - name: ZAP Automation Framework Scan
         uses: zaproxy/action-af@v0.1.0
         with:
           plan: 'zap/automation_plan.yaml'
-          dir: '/zap/wrk/output'
+          dir: '$HOME/zap_output'
 
       - name: Download build artifact
         uses: actions/download-artifact@v4
         with:
           name: build-artifact
-          path: /zap/wrk/output
+          path: $HOME/zap_output
           
       - name: Archive results
         uses: actions/upload-artifact@v2
         with:
           name: zap-scan-results
-          path: zap-report.html
+          path: $HOME/zap_output/*.html

@@ -84,5 +84,6 @@ jobs:
       reportTitle: "ZAP Scanning Report"
       reportDescription: ""
       reportDir: "$HOME/zap_output"
+      displayReport: true
     name: "report"
     type: "report"
