@@ -81,7 +81,7 @@ jobs:
           cmd_options: '-a'
 
       - name: ZAP Automation Framework Scan
-        run: docker run -v $(pwd):/zap/wrk/:rw -t zaproxy/zap-stable zap.sh -cmd -autorun /zap/wrk/automation_plan.yaml
+        run: docker run -v $(pwd):/zap/wrk:rw -t --user root owasp/zap2docker-stable zap.sh -cmd -autorun /zap/wrk/automation_plan.yaml
 
 
           #      - name: Download build artifact
