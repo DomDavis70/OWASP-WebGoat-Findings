@@ -81,12 +81,10 @@ jobs:
           cmd_options: '-a'
 
       - name: ZAP Automation Framework Scan
-        uses: zaproxy/action-af@v0.1.0
-        with:
-          plan: 'zap/automation_plan.yaml'
-          dir: '/zap/wrk/output'
+        run: docker run -v $(pwd):/zap/wrk/:rw -t zaproxy/zap-stable zap.sh -cmd -autorun /zap/wrk/automation_plan.yaml
 
-#      - name: Download build artifact
+
+          #      - name: Download build artifact
 #        uses: actions/download-artifact@v4
 #        with:
 #          name: build-artifact
