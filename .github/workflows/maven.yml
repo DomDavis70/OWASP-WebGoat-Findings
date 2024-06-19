@@ -86,11 +86,11 @@ jobs:
           plan: 'zap/automation_plan.yaml'
           dir: '/zap/wrk/output'
 
-#      - name: Download build artifact
-#        uses: actions/download-artifact@v4
-#        with:
-#          name: build-artifact
-#          path: /zap/wrk/output
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifact
+          path: /zap/wrk/output
           
       - name: Archive results
         uses: actions/upload-artifact@v2

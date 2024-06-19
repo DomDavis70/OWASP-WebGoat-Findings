@@ -4,6 +4,9 @@ LABEL maintainer = "WebGoat team"
 
 RUN \
   useradd -ms /bin/bash webgoat && \
+  mkdir -p /zap/wrk/output && \
+  chown -R webgoat:webgoat /zap/wrk && \
+  chmod -R 775 /zap/wrk && \
   chgrp -R 0 /home/webgoat && \
   chmod -R g=u /home/webgoat
 
