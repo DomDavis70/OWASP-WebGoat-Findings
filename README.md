@@ -113,5 +113,5 @@ Once WebGoat is running in the Docker container, we proceed with scanning the ap
           name: zap-scan-results
           path: zap-report.html
 ```
-Conclusion
+# Conclusion
 This CI pipeline effectively automates the process of vulnerability scanning for the WebGoat application. 
