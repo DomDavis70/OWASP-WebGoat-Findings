@@ -53,3 +53,65 @@ jobs:
         run: |
           semgrep ci --code
           semgrep ci --supply-chain
+```
+
+### 2. **Run WebGoat in Docker**
+Once the project is built, the next step is to run the WebGoat app in a Docker container. This ensures the application is ready for testing with ZAP.
+
+- **Download the build artifact** (WebGoat app).
+- **Build and run the Docker container** with the WebGoat app.
+- **Wait for WebGoat to initialize**.
+
+```yaml
+  zap-scan:
+    runs-on: ubuntu-20.04
+    needs: build
+    steps:
+      - name: Checkout repository and download artifact
+        uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: build-artifact
+          path: target/
+
+      - name: Build and run Docker container with WebGoat
+        run: |
+          docker build -t webgoat-build:latest .
+          docker run -d -p 127.0.0.1:8081:8080 -p 127.0.0.1:9091:9090 webgoat-build:latest
+
+      - name: Wait for WebGoat to initialize
+        run: sleep 30
+```
+In this step, the pipeline first downloads the WebGoat app artifact that was built earlier. Then, it builds the Docker image and runs the container on localhost (with the necessary ports mapped). The sleep 30 command is used to give WebGoat enough time to initialize before proceeding to the ZAP scan.
+
+### 3. **ZAP Vulnerability Scanning**
+Once WebGoat is running in the Docker container, we proceed with scanning the app for vulnerabilities using OWASP ZAP.
+
+- **Run ZAP DAST Scan**: This scan will look for runtime vulnerabilities in the application.
+- **Run ZAP Automation Framework Scan**: This deeper scan checks for additional vulnerabilities.
+- **Archive the ZAP scan results** for easy access.
+
+```yaml
+      - name: Run ZAP DAST scan
+        uses: zaproxy/action-full-scan@v0.10.0
+        with:
+          token: ${{ secrets.PAT }}
+          docker_name: 'ghcr.io/zaproxy/zaproxy:stable'
+          target: 'http://127.0.0.1:8081/WebGoat/login'
+          rules_file_name: 'zap/rules.tsv'
+          cmd_options: '-a'
+
+      - name: Run ZAP Automation Framework scan
+        uses: zaproxy/action-af@v0.1.0
+        with:
+          plan: 'zap/automation_plan.yaml'
+          dir: '/zap/wrk/output'
+
+      - name: Archive results
+        uses: actions/upload-artifact@v4
+        with:
+          name: zap-scan-results
+          path: zap-report.html
+```
+Conclusion
+This CI pipeline effectively automates the process of vulnerability scanning for the WebGoat application. 
