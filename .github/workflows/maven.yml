@@ -92,8 +92,8 @@ jobs:
 #          name: build-artifact
 #          path: /zap/wrk/output
           
-      # - name: Archive results
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: zap-scan-results
-      #     path: zap-report.html
+      - name: Archive results
+        uses: actions/upload-artifact@v4
+        with:
+          name: zap-scan-results
+          path: zap-report.html
