@@ -75,7 +75,7 @@ Once the project is built, the next step is to run the WebGoat app in a Docker c
 ```
 In this step, the pipeline downloads the previously built WebGoat app artifact, then it proceeds to build and run the WebGoat Docker container. The container is launched with the necessary ports mapped (8081 and 9091) to localhost, ensuring that the app is accessible for scanning. The `sleep 30` command provides enough time for WebGoat to fully initialize before the ZAP scan begins.
 
-```
+```yaml
       - name: Build and run Docker container with WebGoat
         run: |
           docker build -t webgoat-build:latest .
