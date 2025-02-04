@@ -93,7 +93,7 @@ jobs:
 #          path: /zap/wrk/output
           
       - name: Archive results
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: zap-scan-results
           path: zap-report.html
