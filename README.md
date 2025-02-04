@@ -16,11 +16,9 @@ The pipeline does the following:
 ### 1. **Build & Static Analysis**
 The pipeline first builds the Java project with Maven and then scans the code for security issues using Semgrep.
 
-- **Checkout the code**.
-- **Set up JDK 17** (for building the project).
-- **Build the project using Maven**.
-- **Upload the build artifact** (WebGoat app) so it can be downloaded in the next step to build the Docker container.
-- **Run Semgrep scans** to check for security vulnerabilities both in the code and its dependencies.
+- **Build the project using Maven** at the target directory where the project files are built.
+- **Upload the build artifact** so it can be downloaded in the next step to build the Docker container.
+- **Run Semgrep scans** to check for security vulnerabilities both in the code and its dependencies. (Setting up Semgrep wasn't too difficult for git actions!). I primarily just needed to specify the scans to run: `semgrep ci --code` and `semgrep ci --supply-chain`. 
 
 ```yaml
 jobs:
@@ -58,7 +56,7 @@ jobs:
 ### 2. **Run WebGoat in Docker**
 Once the project is built, the next step is to run the WebGoat app in a Docker container. This ensures the application is ready for testing with ZAP.
 
-- **Download the build artifact** (WebGoat app).
+- **Download the build artifact** that was just uploaded.
 - **Build and run the Docker container** with the WebGoat app.
 - **Wait for WebGoat to initialize**.
 
@@ -74,6 +72,10 @@ Once the project is built, the next step is to run the WebGoat app in a Docker c
           name: build-artifact
           path: target/
 
+```
+In this step, the pipeline downloads the previously built WebGoat app artifact, then it proceeds to build and run the WebGoat Docker container. The container is launched with the necessary ports mapped (8081 and 9091) to localhost, ensuring that the app is accessible for scanning. The `sleep 30` command provides enough time for WebGoat to fully initialize before the ZAP scan begins.
+
+```
       - name: Build and run Docker container with WebGoat
         run: |
           docker build -t webgoat-build:latest .
@@ -82,7 +84,7 @@ Once the project is built, the next step is to run the WebGoat app in a Docker c
       - name: Wait for WebGoat to initialize
         run: sleep 30
 ```
-In this step, the pipeline first downloads the WebGoat app artifact that was built earlier. Then, it builds the Docker image and runs the container on localhost (with the necessary ports mapped). The sleep 30 command is used to give WebGoat enough time to initialize before proceeding to the ZAP scan.
+
 
 ### 3. **ZAP Vulnerability Scanning**
 Once WebGoat is running in the Docker container, we proceed with scanning the app for vulnerabilities using OWASP ZAP.
